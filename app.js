@@ -25,6 +25,7 @@ mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+mongoose.Promise = global.Promise;
 
 mongoose.connection.on("connected", () => {
   console.log("Connected to MongoDB");
