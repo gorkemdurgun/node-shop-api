@@ -2,6 +2,10 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const productsRoutes = require("./api/routes/products");
 const ordersRoutes = require("./api/routes/orders");
@@ -11,6 +15,20 @@ Morgan, requestlerin loglarını konsola yazdırmak için kullanılır. Requestl
 Morgan, geliştirme ve production modlarında farklı loglar çıktırır, geliştirme modunda daha detaylı loglar çıktırır.
 */
 app.use(morgan("dev"));
+
+/*
+MongoDB, NoSQL veritabanıdır. MongoDB, JSON benzeri belgeleri depolamak için kullanılır.
+*/
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.tmtggzj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+mongoose.connection.on("connected", () => {
+  console.log("Connected to MongoDB");
+});
 
 /*
 Body-parser, requestlerdeki body verilerini okumak için kullanılır.
