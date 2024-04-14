@@ -21,6 +21,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 /*
+Aşağıdaki middleware fonksiyonu, CORS hatalarını engellemek için kullanılır. Bu middleware fonksiyonu, tüm isteklere CORS header'larını ekler.
+res.header metodu, response header'larını tanımlamak için kullanılır. 
+Access-Control-Allow-Origin header'ı, hangi origin'lerin bu API'ye erişebileceğini belirler.
+Access-Control-Allow-Headers header'ı, hangi header'ların bu API'ye erişebileceğini belirler.
+OPTIONS metodu, bir isteğin CORS header'larını kontrol etmek için kullanılır. Eğer bir istek OPTIONS metodu ile gönderilirse, sadece CORS header'larını kontrol eder ve gerçek isteği yapmaz.
+*/
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+    return res.status(200).json({});
+  }
+
+  next();
+});
+
+/*
 app.use metodu, middleware fonksiyonlarını tanımlamak için kullanılır. Middleware fonksiyonları, request ve response objelerine erişebilir.
 Middleware fonksiyonları, request ve response objelerini değiştirebilir ve next metodu ile bir sonraki middleware'e geçebilir.
 */
